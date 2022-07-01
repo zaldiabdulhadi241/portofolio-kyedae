@@ -2,6 +2,4 @@
 deployment:
   tasks:
     - export DEPLOYPATH=/home/zaldiabd/public_html/
-    - /bin/cp index.html $DEPLOYPATH
-    - /bin/cp style $DEPLOYPATH
-    - /bin/cp -R img $DEPLOYPATH
+    - cp -r * $DEPLOYPATH
