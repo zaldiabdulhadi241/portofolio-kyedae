@@ -231,7 +231,19 @@
         </div>
         <div class="row justify-content-center">
           <div class="col-md-8">
-            <form>
+            <div
+              class="alert alert-success alert-dismissible fade show d-none"
+              role="alert"
+            >
+              <strong>Terima Kasih!</strong> Pesan Anda Sudah kami terima.
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="alert"
+                aria-label="Close"
+              ></button>
+            </div>
+            <form name="contact-form">
               <div class="mb-3">
                 <label for="name" class="form-label">Nama Lengkap</label>
                 <input
@@ -239,6 +251,7 @@
                   class="form-control"
                   id="name"
                   aria-describedby="name"
+                  name="nama"
                 />
               </div>
               <div class="mb-3">
@@ -248,13 +261,33 @@
                   class="form-control"
                   id="email"
                   aria-describedby="email"
+                  name="email"
                 />
               </div>
               <div class="mb-3">
                 <label for="pesan" class="form-label">Pesan</label>
-                <textarea class="form-control" id="pesan" rows="3"></textarea>
+                <textarea
+                  class="form-control"
+                  id="pesan"
+                  rows="3"
+                  name="pesan"
+                ></textarea>
               </div>
-              <button type="submit" class="btn btn-primary">Kirim</button>
+              <button type="submit" class="btn btn-primary btn-kirim">
+                Kirim
+              </button>
+              <button
+                class="btn btn-primary btn-loading d-none"
+                type="button"
+                disabled
+              >
+                <span
+                  class="spinner-border spinner-border-sm"
+                  role="status"
+                  aria-hidden="true"
+                ></span>
+                Loading...
+              </button>
             </form>
           </div>
         </div>
@@ -292,5 +325,32 @@
       integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
       crossorigin="anonymous"
     ></script>
+
+    <script>
+      const scriptURL =
+        "https://script.google.com/macros/s/AKfycbwDLEcGS5fbM4AWvQGOnONyLK2XbAQVbMD2W2Sht97I_AqHuFme4pMZIE78IkB8OhWw_g/exec";
+      const form = document.forms["contact-form"];
+      const btnKirim = document.querySelector(".btn-kirim");
+      const btnLoading = document.querySelector(".btn-loading");
+      const alert = document.querySelector(".alert");
+
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        // Ketika Tombol Submit di klik
+        // Tampilkan Tombol Loading dan hilangkan tombol kirim
+        btnLoading.classList.toggle("d-none");
+        btnKirim.classList.toggle("d-none");
+        fetch(scriptURL, { method: "POST", body: new FormData(form) })
+          .then((response) => {
+            // Tampilkan Tombol kirim, hilangkan tombol loading
+            btnLoading.classList.toggle("d-none");
+            btnKirim.classList.toggle("d-none");
+            alert.classList.toggle("d-none");
+            form.reset();
+            console.log("Success!", response);
+          })
+          .catch((error) => console.error("Error!", error.message));
+      });
+    </script>
   </body>
 </html>
